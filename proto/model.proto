@@ -1,0 +1,40 @@
+syntax = "proto3";
+option go_package = ".";
+
+service PaymentService{
+  rpc CreateAccount(CreateAccountRequest)returns(CreateAccountResponse);
+  rpc GetAccount(GetAccountRequest)returns(GetAccountResponse);
+  rpc IncreaseAmount(AmountRequest)returns(AmountResponse);
+  rpc DecreaseAmount(AmountRequest)returns(AmountResponse);
+}
+
+message CreateAccountRequest{
+  string userID = 1;
+}
+
+message GetAccountRequest{
+  string userID = 1;
+}
+
+message AmountRequest{
+  string accountID = 1;
+  double amount = 2;
+}
+
+message CreateAccountResponse{
+    Account account = 1;
+}
+
+message GetAccountResponse{
+    Account account = 1;
+}
+
+message AmountResponse{
+  bool success = 1;
+}
+
+message Account{
+  string ID = 1;
+  string userID = 2;
+  double amount = 3;
+}
