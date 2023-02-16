@@ -4,9 +4,10 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 
 	"Payment-Service/internal/model"
+
+	"github.com/google/uuid"
 )
 
 // TransactionRepository repository interface for account service

@@ -4,9 +4,10 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 
 	"Payment-Service/internal/model"
+
+	"github.com/google/uuid"
 )
 
 // AccountRepository repository interface for account service
@@ -60,6 +61,7 @@ func (a *Account) GetUserAccountForUpdate(ctx context.Context, id string) (accou
 	return
 }
 
+// UpdateAmount update account amount
 func (a *Account) UpdateAmount(ctx context.Context, id string, amount float64) error {
 	err := a.rps.UpdateAmount(ctx, id, amount)
 	if err != nil {
