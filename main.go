@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"net"
 
-	"Payment-Service/internal/config"
-	"Payment-Service/internal/handler"
-	"Payment-Service/internal/repository"
-	"Payment-Service/internal/service"
-	pr "Payment-Service/proto"
+	"github.com/OVantsevich/Payment-Service/internal/config"
+	"github.com/OVantsevich/Payment-Service/internal/handler"
+	"github.com/OVantsevich/Payment-Service/internal/repository"
+	"github.com/OVantsevich/Payment-Service/internal/service"
+	pr "github.com/OVantsevich/Payment-Service/proto"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/sirupsen/logrus"

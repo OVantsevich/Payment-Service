@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"Payment-Service/internal/model"
+	"github.com/OVantsevich/Payment-Service/internal/model"
 )
 
 // Account postgres entity

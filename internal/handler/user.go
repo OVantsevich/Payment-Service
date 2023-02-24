@@ -5,9 +5,9 @@ import (
 	"context"
 	"fmt"
 
-	"Payment-Service/internal/model"
-	"Payment-Service/internal/repository"
-	pr "Payment-Service/proto"
+	"github.com/OVantsevich/Payment-Service/internal/model"
+	"github.com/OVantsevich/Payment-Service/internal/repository"
+	pr "github.com/OVantsevich/Payment-Service/proto"
 
 	"github.com/sirupsen/logrus"
 )
