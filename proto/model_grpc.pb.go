@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: proto/model.proto
 
-package __
+package proto
 
 import (
 	context "context"
@@ -38,7 +38,7 @@ func NewPaymentServiceClient(cc grpc.ClientConnInterface) PaymentServiceClient {
 
 func (c *paymentServiceClient) CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error) {
 	out := new(CreateAccountResponse)
-	err := c.cc.Invoke(ctx, "/PaymentService/CreateAccount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/paymentservice_proto.PaymentService/CreateAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (c *paymentServiceClient) CreateAccount(ctx context.Context, in *CreateAcco
 
 func (c *paymentServiceClient) GetAccount(ctx context.Context, in *GetAccountRequest, opts ...grpc.CallOption) (*GetAccountResponse, error) {
 	out := new(GetAccountResponse)
-	err := c.cc.Invoke(ctx, "/PaymentService/GetAccount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/paymentservice_proto.PaymentService/GetAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *paymentServiceClient) GetAccount(ctx context.Context, in *GetAccountReq
 
 func (c *paymentServiceClient) IncreaseAmount(ctx context.Context, in *AmountRequest, opts ...grpc.CallOption) (*AmountResponse, error) {
 	out := new(AmountResponse)
-	err := c.cc.Invoke(ctx, "/PaymentService/IncreaseAmount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/paymentservice_proto.PaymentService/IncreaseAmount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (c *paymentServiceClient) IncreaseAmount(ctx context.Context, in *AmountReq
 
 func (c *paymentServiceClient) DecreaseAmount(ctx context.Context, in *AmountRequest, opts ...grpc.CallOption) (*AmountResponse, error) {
 	out := new(AmountResponse)
-	err := c.cc.Invoke(ctx, "/PaymentService/DecreaseAmount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/paymentservice_proto.PaymentService/DecreaseAmount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func _PaymentService_CreateAccount_Handler(srv interface{}, ctx context.Context,
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/PaymentService/CreateAccount",
+		FullMethod: "/paymentservice_proto.PaymentService/CreateAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PaymentServiceServer).CreateAccount(ctx, req.(*CreateAccountRequest))
@@ -140,7 +140,7 @@ func _PaymentService_GetAccount_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/PaymentService/GetAccount",
+		FullMethod: "/paymentservice_proto.PaymentService/GetAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PaymentServiceServer).GetAccount(ctx, req.(*GetAccountRequest))
@@ -158,7 +158,7 @@ func _PaymentService_IncreaseAmount_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/PaymentService/IncreaseAmount",
+		FullMethod: "/paymentservice_proto.PaymentService/IncreaseAmount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PaymentServiceServer).IncreaseAmount(ctx, req.(*AmountRequest))
@@ -176,7 +176,7 @@ func _PaymentService_DecreaseAmount_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/PaymentService/DecreaseAmount",
+		FullMethod: "/paymentservice_proto.PaymentService/DecreaseAmount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PaymentServiceServer).DecreaseAmount(ctx, req.(*AmountRequest))
@@ -188,7 +188,7 @@ func _PaymentService_DecreaseAmount_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PaymentService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "PaymentService",
+	ServiceName: "paymentservice_proto.PaymentService",
 	HandlerType: (*PaymentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

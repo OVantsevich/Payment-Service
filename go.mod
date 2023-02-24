@@ -1,4 +1,4 @@
-module Payment-Service
+module github.com/OVantsevich/Payment-Service
 
 go 1.19
 
