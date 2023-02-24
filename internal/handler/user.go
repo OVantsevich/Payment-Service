@@ -113,7 +113,6 @@ func (h *User) IncreaseAmount(ctx context.Context, request *pr.AmountRequest) (r
 		return nil, fmt.Errorf("user - IncreaseAmount - WithinTransaction: %w", err)
 	}
 
-	response.Success = true
 	return
 }
 
@@ -127,8 +126,9 @@ func (h *User) DecreaseAmount(ctx context.Context, request *pr.AmountRequest) (r
 			return trxErr
 		}
 		if account.Amount < request.Amount {
-			response.Success = false
-			return nil
+			trxErr = fmt.Errorf("user - DecreaseAmount: not enough money")
+			logrus.Error(trxErr)
+			return trxErr
 		}
 
 		trxErr = h.acService.UpdateAmount(ctx, request.AccountID, -request.Amount)
@@ -154,6 +154,5 @@ func (h *User) DecreaseAmount(ctx context.Context, request *pr.AmountRequest) (r
 		return nil, fmt.Errorf("user - DecreaseAmount - WithinTransaction: %w", err)
 	}
 
-	response.Success = true
 	return response, nil
 }

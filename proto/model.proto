@@ -32,7 +32,6 @@ message GetAccountResponse{
 }
 
 message AmountResponse{
-  bool success = 1;
 }
 
 message Account{
