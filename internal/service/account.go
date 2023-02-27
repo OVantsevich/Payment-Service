@@ -16,7 +16,7 @@ import (
 type AccountRepository interface {
 	CreateAccount(ctx context.Context, account *model.Account) (*model.Account, error)
 	GetUserAccount(ctx context.Context, id string) (*model.Account, error)
-	GetUserAccountForUpdate(ctx context.Context, id string) (*model.Account, error)
+	GetAccountForUpdate(ctx context.Context, id string) (*model.Account, error)
 	UpdateAmount(ctx context.Context, id string, amount float64) error
 }
 
@@ -53,7 +53,7 @@ func (a *Account) GetUserAccount(ctx context.Context, id string) (account *model
 
 // GetUserAccountForUpdate service get user account for update
 func (a *Account) GetUserAccountForUpdate(ctx context.Context, id string) (account *model.Account, err error) {
-	account, err = a.rps.GetUserAccountForUpdate(ctx, id)
+	account, err = a.rps.GetAccountForUpdate(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("account - GetUserAccountForUpdate - GetUserAccountForUpdate: %w", err)
 	}

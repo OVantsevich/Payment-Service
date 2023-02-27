@@ -39,7 +39,7 @@ func main() {
 	trServ := service.NewTransaction(trRepos)
 	acServ := service.NewAccount(acRepos)
 
-	server := handler.NewUserHandler(trServ, acServ, repository.NewPgxTransactor(pool))
+	server := handler.NewAccountsHandler(trServ, acServ, repository.NewPgxTransactor(pool))
 
 	ns := grpc.NewServer()
 	pr.RegisterPaymentServiceServer(ns, server)

@@ -30,8 +30,8 @@ type TransactionsService interface {
 	GetAccountTransactions(ctx context.Context, id string) (map[string]model.Transaction, error)
 }
 
-// User handler
-type User struct {
+// Accounts handler
+type Accounts struct {
 	pr.UnimplementedPaymentServiceServer
 	trService TransactionsService
 	acService AccountService
@@ -39,13 +39,13 @@ type User struct {
 	transactor repository.PgxTransactor
 }
 
-// NewUserHandler new user handler
-func NewUserHandler(tr TransactionsService, ac AccountService, trx repository.PgxTransactor) *User {
-	return &User{trService: tr, acService: ac, transactor: trx}
+// NewAccountsHandler new user handler
+func NewAccountsHandler(tr TransactionsService, ac AccountService, trx repository.PgxTransactor) *Accounts {
+	return &Accounts{trService: tr, acService: ac, transactor: trx}
 }
 
 // CreateAccount handler create account
-func (h *User) CreateAccount(ctx context.Context, request *pr.CreateAccountRequest) (response *pr.CreateAccountResponse, err error) {
+func (h *Accounts) CreateAccount(ctx context.Context, request *pr.CreateAccountRequest) (response *pr.CreateAccountResponse, err error) {
 	user := &model.Account{
 		User: request.UserID,
 	}
@@ -69,7 +69,7 @@ func (h *User) CreateAccount(ctx context.Context, request *pr.CreateAccountReque
 }
 
 // GetAccount handler get user account
-func (h *User) GetAccount(ctx context.Context, request *pr.GetAccountRequest) (response *pr.GetAccountResponse, err error) {
+func (h *Accounts) GetAccount(ctx context.Context, request *pr.GetAccountRequest) (response *pr.GetAccountResponse, err error) {
 	response = &pr.GetAccountResponse{}
 	var accountResponse *model.Account
 	accountResponse, err = h.acService.GetUserAccount(ctx, request.UserID)
@@ -88,7 +88,7 @@ func (h *User) GetAccount(ctx context.Context, request *pr.GetAccountRequest) (r
 }
 
 // IncreaseAmount handler increase amount
-func (h *User) IncreaseAmount(ctx context.Context, request *pr.AmountRequest) (response *pr.AmountResponse, err error) {
+func (h *Accounts) IncreaseAmount(ctx context.Context, request *pr.AmountRequest) (response *pr.AmountResponse, err error) {
 	err = h.transactor.WithinTransaction(ctx, func(ctx context.Context) error {
 		trxErr := h.acService.UpdateAmount(ctx, request.AccountID, request.Amount)
 		if trxErr != nil {
@@ -117,7 +117,7 @@ func (h *User) IncreaseAmount(ctx context.Context, request *pr.AmountRequest) (r
 }
 
 // DecreaseAmount handler decrease amount
-func (h *User) DecreaseAmount(ctx context.Context, request *pr.AmountRequest) (response *pr.AmountResponse, err error) {
+func (h *Accounts) DecreaseAmount(ctx context.Context, request *pr.AmountRequest) (response *pr.AmountResponse, err error) {
 	err = h.transactor.WithinTransaction(ctx, func(ctx context.Context) error {
 		account, trxErr := h.acService.GetUserAccountForUpdate(ctx, request.AccountID)
 		if trxErr != nil {
@@ -130,7 +130,6 @@ func (h *User) DecreaseAmount(ctx context.Context, request *pr.AmountRequest) (r
 			logrus.Error(trxErr)
 			return trxErr
 		}
-
 		trxErr = h.acService.UpdateAmount(ctx, request.AccountID, -request.Amount)
 		if trxErr != nil {
 			trxErr = fmt.Errorf("user - DecreaseAmount - UpdateAmount: %w", trxErr)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/OVantsevich/Payment-Service/internal/model"
-	"strconv"
 	"sync"
 	"testing"
 	"time"
@@ -65,53 +64,40 @@ func TestAccount_GetUserAccount(t *testing.T) {
 	}
 }
 
-func TestAccount_GetUserAccountForUpdate(t *testing.T) {
+func TestAccount_GetAccountForUpdate(t *testing.T) {
 	var err error
 	ctx := context.Background()
-	var testData = []*model.Account{
-		{
-			ID:      uuid.NewString(),
-			User:    uuid.NewString(),
-			Amount:  100,
-			Created: time.Now(),
-			Updated: time.Now(),
-		},
+	var testData = &model.Account{
+		ID:      uuid.NewString(),
+		User:    uuid.NewString(),
+		Amount:  100,
+		Created: time.Now(),
+		Updated: time.Now(),
 	}
+	_, err = testAccountRepository.CreateAccount(ctx, testData)
+	require.NoError(t, err)
+	err = testAccountRepository.UpdateAmount(ctx, testData.ID, 100)
+	require.NoError(t, err)
 
+	var start sync.Mutex
 	var wg sync.WaitGroup
-	for _, p := range testData {
-		_, err = testAccountRepository.CreateAccount(ctx, p)
-		require.NoError(t, err)
+	start.Lock()
 
-		_, err = testAccountRepository.CreateAccount(ctx, p)
-		require.Error(t, err)
-
-		var inTrx int64
-		var inGo int64
-
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
-		err = testTransactor.WithinTransaction(context.Background(), func(trxCtx context.Context) error {
-			var trxErr error
-			_, trxErr = testAccountRepository.GetUserAccountForUpdate(trxCtx, p.User)
-			require.NoError(t, trxErr)
-			go func() {
-				_, e := testAccountRepository.GetUserAccountForUpdate(ctx, p.User)
-				require.NoError(t, e)
-				time.Sleep(time.Second)
-				inGo = time.Now().Unix()
-				fmt.Println("go: " + strconv.FormatInt(inGo, 10))
-				wg.Done()
-			}()
-			time.Sleep(time.Second * 2)
-			inTrx = time.Now().Unix()
-			fmt.Println("trx: " + strconv.FormatInt(inTrx, 10))
-			trxErr = testAccountRepository.UpdateAmount(trxCtx, p.ID, p.Amount)
-			require.NoError(t, trxErr)
+		go testTransactor.WithinTransaction(context.Background(), func(trxCtx context.Context) error {
+			defer wg.Done()
+			acc, trxErr := testAccountRepository.GetAccountForUpdate(trxCtx, testData.ID)
+			if acc.Amount < 100 {
+				return fmt.Errorf("not enough money")
+			}
+			trxErr = testAccountRepository.UpdateAmount(trxCtx, testData.ID, -100)
 			return trxErr
 		})
-		require.NoError(t, err)
-		constr := inTrx < inGo
-		require.True(t, constr)
-		wg.Wait()
 	}
+
+	wg.Wait()
+	acc, err := testAccountRepository.GetUserAccount(ctx, testData.User)
+	require.NoError(t, err)
+	require.Equal(t, 0.0, acc.Amount)
 }

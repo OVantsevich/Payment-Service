@@ -44,10 +44,10 @@ func (r *Account) GetUserAccount(ctx context.Context, userID string) (*model.Acc
 	return &account, nil
 }
 
-// GetUserAccountForUpdate get user account for update
-func (r *Account) GetUserAccountForUpdate(ctx context.Context, userID string) (*model.Account, error) {
+// GetAccountForUpdate get user account for update
+func (r *Account) GetAccountForUpdate(ctx context.Context, accountID string) (*model.Account, error) {
 	account := model.Account{}
-	err := r.QueryRow(ctx, `select id, amount from accounts where "user"=$1 and deleted=false for update`, userID).Scan(
+	err := r.QueryRow(ctx, `select id, amount from accounts where id=$1 and deleted=false for update`, accountID).Scan(
 		&account.ID, &account.Amount)
 	if err != nil {
 		return nil, fmt.Errorf("account - GetUserAccountForUpdate - QueryRow: %w", err)

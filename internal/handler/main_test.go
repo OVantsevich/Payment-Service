@@ -1,15 +1,16 @@
-package repository
+package handler
 
 import (
 	"context"
 	"fmt"
-	"github.com/ory/dockertest/v3"
-	"os"
-	"testing"
-
+	"github.com/OVantsevich/Payment-Service/internal/repository"
+	"github.com/OVantsevich/Payment-Service/internal/service"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
 	"github.com/sirupsen/logrus"
+	"os"
+	"testing"
 )
 
 const (
@@ -27,9 +28,7 @@ const (
 	testPostgresPassword = "postgres"
 )
 
-var testAccountRepository *Account
-var testTransactionRepository *Transaction
-var testTransactor PgxTransactor
+var testAccountHandler *Accounts
 
 func TestMain(m *testing.M) {
 	pool, err := dockertest.NewPool(testLocalDockerUbuntu)
@@ -77,9 +76,12 @@ func TestMain(m *testing.M) {
 		if retryErr != nil {
 			return retryErr
 		}
-		testTransactionRepository = NewTransaction(NewPgxWithinTransactionRunner(pgPool))
-		testAccountRepository = NewAccount(NewPgxWithinTransactionRunner(pgPool))
-		testTransactor = NewPgxTransactor(pgPool)
+		testTransactionRepository := repository.NewTransaction(repository.NewPgxWithinTransactionRunner(pgPool))
+		testAccountRepository := repository.NewAccount(repository.NewPgxWithinTransactionRunner(pgPool))
+		testTransactor := repository.NewPgxTransactor(pgPool)
+		testAccountService := service.NewAccount(testAccountRepository)
+		testTransactionService := service.NewTransaction(testTransactionRepository)
+		testAccountHandler = NewAccountsHandler(testTransactionService, testAccountService, testTransactor)
 		return nil
 	}); err != nil {
 		logrus.Fatalf("Could not connect to postgres: %s", err)

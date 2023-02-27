@@ -34,16 +34,16 @@ func (r *Transaction) CreateTransaction(ctx context.Context, transaction *model.
 }
 
 // GetAccountTransactions get account transaction
-func (r *Transaction) GetAccountTransactions(ctx context.Context, id string) (map[string]model.Transaction, error) {
+func (r *Transaction) GetAccountTransactions(ctx context.Context, accountID string) (map[string]model.Transaction, error) {
 	transactions := make(map[string]model.Transaction, 0)
-	rows, err := r.Query(ctx, `select id, amount, created from account where "user"=$1 and deleted=false`, id)
+	rows, err := r.Query(ctx, `select id, amount, created from transactions where account=$1 and deleted=false`, accountID)
 	if err != nil {
 		return nil, fmt.Errorf("transaction - GetAccountTransactions - QueryRow: %w", err)
 	}
 
 	for rows.Next() {
 		trs := model.Transaction{
-			Account: id,
+			Account: accountID,
 		}
 		err = rows.Scan(&trs.ID, &trs.Amount, &trs.Created)
 		if err != nil {
