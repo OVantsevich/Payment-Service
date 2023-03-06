@@ -9,12 +9,12 @@ import (
 
 // MainConfig with init data
 type MainConfig struct {
-	PostgresPort     string `env:"POSTGRES_DB_URL,notEmpty" envDefault:"5433"`
-	PostgresHost     string `env:"POSTGRES_DB_URL,notEmpty" envDefault:"localhost"`
+	PostgresPort     string `env:"POSTGRES_PORT,notEmpty" envDefault:"5433"`
+	PostgresHost     string `env:"POSTGRES_HOST	,notEmpty" envDefault:"localhost"`
 	PostgresPassword string `env:"POSTGRES_PASSWORD,notEmpty" envDefault:"postgres"`
 	PostgresUser     string `env:"POSTGRES_USER,notEmpty" envDefault:"postgres"`
 	PostgresDB       string `env:"POSTGRES_DB,notEmpty" envDefault:"postgres"`
-	Port             string `env:"PORT,notEmpty" envDefault:"30000"`
+	Port             string `env:"PORT,notEmpty" envDefault:"2000"`
 }
 
 // NewMainConfig parsing config from environment
