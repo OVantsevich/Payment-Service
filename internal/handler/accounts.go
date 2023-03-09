@@ -113,7 +113,7 @@ func (h *Accounts) IncreaseAmount(ctx context.Context, request *pr.AmountRequest
 		return nil, fmt.Errorf("user - IncreaseAmount - WithinTransaction: %w", err)
 	}
 
-	return
+	return &pr.AmountResponse{}, nil
 }
 
 // DecreaseAmount handler decrease amount
@@ -153,5 +153,5 @@ func (h *Accounts) DecreaseAmount(ctx context.Context, request *pr.AmountRequest
 		return nil, fmt.Errorf("user - DecreaseAmount - WithinTransaction: %w", err)
 	}
 
-	return response, nil
+	return &pr.AmountResponse{}, nil
 }
